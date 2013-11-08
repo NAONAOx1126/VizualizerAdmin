@@ -2,13 +2,13 @@
 
 /**
  * Copyright (C) 2012 Vizualizer All Rights Reserved.
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  * http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -34,43 +34,44 @@ class VizualizerAdmin_Module_Login extends Vizualizer_Plugin_Module
     function execute($params)
     {
         $loader = new Vizualizer_Plugin("Admin");
-        if (empty(Vizualizer_Session::get(VizualizerAdmin::SESSION_KEY))) {
+        print_r(Vizualizer_Session::get(VizualizerAdmin::SESSION_KEY));
+        if (Vizualizer_Session::get(VizualizerAdmin::SESSION_KEY) === null) {
             $post = Vizualizer::request();
-            if (array_key_exists("login", $post)) {
+            if (isset($post["login"])) {
                 // 管理者モデルを取得する。
                 $companyOperator = $loader->loadModel("CompanyOperator");
-                
+
                 // 渡されたログインIDでレコードを取得する。
                 $companyOperator->findByLoginId($post["login_id"]);
-                
+
                 // ログインIDに該当するアカウントが無い場合
                 Vizualizer_Logger::writeDebug("Try Login AS :\r\n" . var_export($companyOperator->toArray(), true));
                 if (! ($companyOperator->operator_id > 0)) {
                     Vizualizer_Logger::writeDebug("ログインIDに該当するアカウントがありません。");
                     throw new Vizualizer_Exception_Invalid(array("ログイン情報が正しくありません。"));
                 }
-                
+
                 // 保存されたパスワードと一致するか調べる。
                 if ($companyOperator->password != $this->encryptPassword($companyOperator->login_id, $post["password"])) {
                     Vizualizer_Logger::writeDebug("パスワードが一致しません");
                     throw new Vizualizer_Exception_Invalid(array("ログイン情報が正しくありません。"));
                 }
-                
+
                 // アカウントが有効期限内か調べる。
                 if (! empty($companyOperator->start_time) && time() < strtotime($companyOperator->start_time)) {
                     Vizualizer_Logger::writeDebug("アカウントが利用開始されていません。");
                     throw new Vizualizer_Exception_Invalid(array("アカウントが利用開始されていません。"));
                 }
-                
+
                 // アカウントが有効期限内か調べる。
                 if (! empty($companyOperator->end_time) && time() > strtotime($companyOperator->end_time)) {
                     Vizualizer_Logger::writeDebug("アカウントが有効期限切れです。");
                     throw new Vizualizer_Exception_Invalid(array("アカウントが有効期限切れです。"));
                 }
-                
+
                 // アクセス権限のあるサイトか調べる
                 $company = $companyOperator->company();
-                
+
                 // ログインに成功した場合には管理者情報をセッションに格納する。
                 Vizualizer_Session::set(VizualizerAdmin::SESSION_KEY, $companyOperator->toArray());
             } else {

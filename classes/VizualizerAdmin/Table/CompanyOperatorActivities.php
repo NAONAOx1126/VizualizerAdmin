@@ -36,7 +36,6 @@ class VizualizerAdmin_Table_CompanyOperatorActivities extends Vizualizer_Plugin_
      */
     public function __construct()
     {
-        $this->db = Vizualizer_Database_Factory::getConnection("admin");
         parent::__construct("admin_company_operator_activities", "admin");
     }
 
@@ -45,7 +44,12 @@ class VizualizerAdmin_Table_CompanyOperatorActivities extends Vizualizer_Plugin_
      */
     public static function install()
     {
-        $connection = Vizualizer_Database_Factory::getConnection("admin");
-        $connection->query(file_get_contents(dirname(__FILE__) . "/../../../sqls/company_operator_activities.sql"));
+        $connection = Vizualizer_Database_Factory::begin("admin");
+        try {
+            $connection->query(file_get_contents(dirname(__FILE__) . "/../../../sqls/company_operator_activities.sql"));
+            Vizualizer_Database_Factory::commit($connection);
+        } catch (Exception $e) {
+            Vizualizer_Database_Factory::rollback($connection);
+        }
     }
 }

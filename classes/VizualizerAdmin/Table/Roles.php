@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Copyright (C) 2012 Vizualizer All Rights Reserved.
  *
@@ -27,19 +28,28 @@
  * @package VizualizerAdmin
  * @author Naohisa Minagawa <info@vizualizer.jp>
  */
-class VizualizerAdmin_Table_RolesTable extends Vizualizer_Plugin_Table{
+class VizualizerAdmin_Table_RolesTable extends Vizualizer_Plugin_Table
+{
+
     /**
      * コンストラクタです。
      */
-    public function __construct(){
-        $this->db = Vizualizer_Database_Factory::getConnection("admin");
+    public function __construct()
+    {
         parent::__construct("admin_roles", "admin");
     }
+
     /**
      * テーブルを作成するためのスタティックメソッドです。。
      */
-    public static function install(){
-        $connection = Vizualizer_Database_Factory::getConnection("admin");
-        $connection->query(file_get_contents(dirname(__FILE__)."/../../../sqls/roles.sql"));
+    public static function install()
+    {
+        $connection = Vizualizer_Database_Factory::begin("admin");
+        try {
+            $connection->query(file_get_contents(dirname(__FILE__) . "/../../../sqls/roles.sql"));
+            Vizualizer_Database_Factory::commit($connection);
+        } catch (Exception $e) {
+            Vizualizer_Database_Factory::rollback($connection);
+        }
     }
 }
