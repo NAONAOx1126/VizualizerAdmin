@@ -111,17 +111,6 @@ class VizualizerAdmin_Model_CompanyOperator extends Vizualizer_Plugin_Model
     }
 
     /**
-     * オペレータの営業日を取得する。
-     */
-    public function activities()
-    {
-        $loader = new Vizualizer_Plugin("admin");
-        $companyOperatorActivity = $loader->loadModel("CompanyOperatorActivity");
-        $companyOperatorActivities = $companyOperatorActivity->findAllByOperatorId($this->operator_id);
-        return $companyOperatorActivities;
-    }
-
-    /**
      * 都道府県の名前を取得
      */
     function pref_name($pref_name = null)
