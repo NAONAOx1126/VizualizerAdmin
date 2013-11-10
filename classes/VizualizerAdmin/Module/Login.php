@@ -34,7 +34,6 @@ class VizualizerAdmin_Module_Login extends Vizualizer_Plugin_Module
     function execute($params)
     {
         $loader = new Vizualizer_Plugin("Admin");
-        print_r(Vizualizer_Session::get(VizualizerAdmin::SESSION_KEY));
         if (Vizualizer_Session::get(VizualizerAdmin::SESSION_KEY) === null) {
             $post = Vizualizer::request();
             if (isset($post["login"])) {
@@ -80,7 +79,7 @@ class VizualizerAdmin_Module_Login extends Vizualizer_Plugin_Module
             }
         }
         // 管理者モデルを復元する。
-        $companyOperator = $loader->loadModel("CompanyOperatorModel", Vizualizer_Session::get(VizualizerAdmin::SESSION_KEY));
+        $companyOperator = $loader->loadModel("CompanyOperator", Vizualizer_Session::get(VizualizerAdmin::SESSION_KEY));
         $attr = Vizualizer::attr();
         $attr[VizualizerAdmin::KEY] = $companyOperator;
     }

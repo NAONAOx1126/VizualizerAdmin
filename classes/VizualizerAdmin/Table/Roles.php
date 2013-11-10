@@ -28,7 +28,7 @@
  * @package VizualizerAdmin
  * @author Naohisa Minagawa <info@vizualizer.jp>
  */
-class VizualizerAdmin_Table_RolesTable extends Vizualizer_Plugin_Table
+class VizualizerAdmin_Table_Roles extends Vizualizer_Plugin_Table
 {
 
     /**
