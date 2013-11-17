@@ -45,7 +45,7 @@ class VizualizerAdmin_Module_Login extends Vizualizer_Plugin_Module
 
                 // ログインIDに該当するアカウントが無い場合
                 Vizualizer_Logger::writeDebug("Try Login AS :\r\n" . var_export($companyOperator->toArray(), true));
-                if (! ($companyOperator->operator_id > 0)) {
+                if (!($companyOperator->operator_id > 0)) {
                     Vizualizer_Logger::writeDebug("ログインIDに該当するアカウントがありません。");
                     throw new Vizualizer_Exception_Invalid(array("ログイン情報が正しくありません。"));
                 }
@@ -57,13 +57,13 @@ class VizualizerAdmin_Module_Login extends Vizualizer_Plugin_Module
                 }
 
                 // アカウントが有効期限内か調べる。
-                if (! empty($companyOperator->start_time) && time() < strtotime($companyOperator->start_time)) {
+                if (!empty($companyOperator->start_time) && time() < strtotime($companyOperator->start_time)) {
                     Vizualizer_Logger::writeDebug("アカウントが利用開始されていません。");
                     throw new Vizualizer_Exception_Invalid(array("アカウントが利用開始されていません。"));
                 }
 
                 // アカウントが有効期限内か調べる。
-                if (! empty($companyOperator->end_time) && time() > strtotime($companyOperator->end_time)) {
+                if (!empty($companyOperator->end_time) && time() > strtotime($companyOperator->end_time)) {
                     Vizualizer_Logger::writeDebug("アカウントが有効期限切れです。");
                     throw new Vizualizer_Exception_Invalid(array("アカウントが有効期限切れです。"));
                 }
@@ -73,6 +73,13 @@ class VizualizerAdmin_Module_Login extends Vizualizer_Plugin_Module
 
                 // ログインに成功した場合には管理者情報をセッションに格納する。
                 Vizualizer_Session::set(VizualizerAdmin::SESSION_KEY, $companyOperator->toArray());
+
+                // 権限に自動遷移先が割り当てられている場合はリダイレクト
+                if (!empty($companyOperator->role()->default_page)) {
+                    $this->redirectInside($companyOperator->role()->default_page);
+                } else {
+                    $this->reload();
+                }
             } else {
                 // ログインIDが渡っていない場合には認証しない
                 throw new Vizualizer_Exception_Invalid(array());

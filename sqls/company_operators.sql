@@ -24,6 +24,7 @@ CREATE TABLE IF NOT EXISTS `admin_company_operators` (
   `url` varchar(200) COLLATE utf8_unicode_ci DEFAULT NULL COMMENT 'サイトURL',
   `email` varchar(200) COLLATE utf8_unicode_ci DEFAULT NULL COMMENT 'メールアドレス',
   `location` varchar(200) COLLATE utf8_unicode_ci DEFAULT NULL COMMENT '所在地',
+  `age` int(11) DEFAULT NULL COMMENT '年齢',
   `support_limit` int(11) DEFAULT NULL COMMENT '受付可能人数',
   `description` varchar(2048) COLLATE utf8_unicode_ci DEFAULT NULL COMMENT '備考',
   `contact_name` varchar(200) COLLATE utf8_unicode_ci DEFAULT NULL COMMENT '受付担当者名',

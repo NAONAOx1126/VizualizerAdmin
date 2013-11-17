@@ -107,6 +107,9 @@ class VizualizerAdmin_Model_CompanyOperator extends Vizualizer_Plugin_Model
      */
     public function hasRole($roles)
     {
+        if (!is_array($roles)) {
+            $roles = array($roles);
+        }
         return in_array($this->role()->role_code, $roles);
     }
 
