@@ -28,7 +28,7 @@
  * @package VizualizerAdmin
  * @author Naohisa Minagawa <info@vizualizer.jp>
  */
-class VizualizerAdmin_Table_RolesTable extends Vizualizer_Plugin_Table
+class VizualizerAdmin_Table_Roles extends Vizualizer_Plugin_Table
 {
 
     /**
@@ -46,6 +46,7 @@ class VizualizerAdmin_Table_RolesTable extends Vizualizer_Plugin_Table
     {
         $connection = Vizualizer_Database_Factory::begin("admin");
         try {
+            // テーブルのインストール
             $connection->query(file_get_contents(dirname(__FILE__) . "/../../../sqls/roles.sql"));
             Vizualizer_Database_Factory::commit($connection);
         } catch (Exception $e) {

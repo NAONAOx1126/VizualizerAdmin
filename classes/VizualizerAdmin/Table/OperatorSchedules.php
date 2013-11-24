@@ -23,12 +23,12 @@
  */
 
 /**
- * admin_company_operator_activitiesテーブルの定義クラスです。
+ * admin_operator_schedulesテーブルの定義クラスです。
  *
  * @package VizualizerAdmin
  * @author Naohisa Minagawa <info@vizualizer.jp>
  */
-class VizualizerAdmin_Table_CompanyOperatorActivities extends Vizualizer_Plugin_Table
+class VizualizerAdmin_Table_Companys extends Vizualizer_Plugin_Table
 {
 
     /**
@@ -36,7 +36,7 @@ class VizualizerAdmin_Table_CompanyOperatorActivities extends Vizualizer_Plugin_
      */
     public function __construct()
     {
-        parent::__construct("admin_company_operator_activities", "admin");
+        parent::__construct("admin_operator_schedules", "admin");
     }
 
     /**
@@ -46,7 +46,11 @@ class VizualizerAdmin_Table_CompanyOperatorActivities extends Vizualizer_Plugin_
     {
         $connection = Vizualizer_Database_Factory::begin("admin");
         try {
-            $connection->query(file_get_contents(dirname(__FILE__) . "/../../../sqls/company_operator_activities.sql"));
+            // 依存テーブルをインストール
+            VizualizerAdmin_Table_CompanyOperators::install();
+
+            // テーブルのインストール
+            $connection->query(file_get_contents(dirname(__FILE__) . "/../../../sqls/operator_schedules.sql"));
             Vizualizer_Database_Factory::commit($connection);
         } catch (Exception $e) {
             Vizualizer_Database_Factory::rollback($connection);

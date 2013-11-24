@@ -23,13 +23,10 @@
  */
 
 /**
- * admin_company_operatorsテーブルの定義クラスです。
+ * admin_companysテーブルの定義クラスです。
  *
  * @package VizualizerAdmin
  * @author Naohisa Minagawa <info@vizualizer.jp>
- */
-/**
- * admin_companysテーブルの定義クラスです。
  */
 class VizualizerAdmin_Table_Companys extends Vizualizer_Plugin_Table
 {
@@ -49,6 +46,7 @@ class VizualizerAdmin_Table_Companys extends Vizualizer_Plugin_Table
     {
         $connection = Vizualizer_Database_Factory::begin("admin");
         try {
+            // テーブルのインストール
             $connection->query(file_get_contents(dirname(__FILE__) . "/../../../sqls/companys.sql"));
             Vizualizer_Database_Factory::commit($connection);
         } catch (Exception $e) {

@@ -107,18 +107,10 @@ class VizualizerAdmin_Model_CompanyOperator extends Vizualizer_Plugin_Model
      */
     public function hasRole($roles)
     {
+        if (!is_array($roles)) {
+            $roles = array($roles);
+        }
         return in_array($this->role()->role_code, $roles);
-    }
-
-    /**
-     * オペレータの営業日を取得する。
-     */
-    public function activities()
-    {
-        $loader = new Vizualizer_Plugin("admin");
-        $companyOperatorActivity = $loader->loadModel("CompanyOperatorActivity");
-        $companyOperatorActivities = $companyOperatorActivity->findAllByOperatorId($this->operator_id);
-        return $companyOperatorActivities;
     }
 
     /**
