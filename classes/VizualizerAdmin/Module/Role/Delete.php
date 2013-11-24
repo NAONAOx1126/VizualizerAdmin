@@ -23,23 +23,16 @@
  */
 
 /**
- * オペレータのリストをページング付きで取得する。
+ * ロールのデータを削除する。
  *
  * @package VizualizerAdmin
  * @author Naohisa Minagawa <info@vizualizer.jp>
  */
-class VizualizerAdmin_Module_Operator_Page extends Vizualizer_Plugin_Module_Page
+class VizualizerAdmin_Module_Role_Delete extends Vizualizer_Plugin_Module_Delete
 {
 
     function execute($params)
     {
-        $post = Vizualizer::request();
-        if ($params->check("roles")) {
-            $search = $post["search"];
-            $search["in:role_id"] = explode(",", $params->get("roles"));
-            $params->set("search", $search);
-        }
-        $this->executeImpl($params, "Admin", "CompanyOperator", $params->get("result", "operators"));
+        $this->executeImpl("Admin", "Role", "role_id");
     }
 }
-?>

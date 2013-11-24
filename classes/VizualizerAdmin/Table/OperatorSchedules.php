@@ -23,12 +23,12 @@
  */
 
 /**
- * admin_rolesテーブルの定義クラスです。
+ * admin_operator_schedulesテーブルの定義クラスです。
  *
  * @package VizualizerAdmin
  * @author Naohisa Minagawa <info@vizualizer.jp>
  */
-class VizualizerAdmin_Table_Roles extends Vizualizer_Plugin_Table
+class VizualizerAdmin_Table_Companys extends Vizualizer_Plugin_Table
 {
 
     /**
@@ -36,7 +36,7 @@ class VizualizerAdmin_Table_Roles extends Vizualizer_Plugin_Table
      */
     public function __construct()
     {
-        parent::__construct("admin_roles", "admin");
+        parent::__construct("admin_operator_schedules", "admin");
     }
 
     /**
@@ -46,8 +46,11 @@ class VizualizerAdmin_Table_Roles extends Vizualizer_Plugin_Table
     {
         $connection = Vizualizer_Database_Factory::begin("admin");
         try {
+            // 依存テーブルをインストール
+            VizualizerAdmin_Table_CompanyOperators::install();
+
             // テーブルのインストール
-            $connection->query(file_get_contents(dirname(__FILE__) . "/../../../sqls/roles.sql"));
+            $connection->query(file_get_contents(dirname(__FILE__) . "/../../../sqls/operator_schedules.sql"));
             Vizualizer_Database_Factory::commit($connection);
         } catch (Exception $e) {
             Vizualizer_Database_Factory::rollback($connection);

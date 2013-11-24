@@ -23,23 +23,23 @@
  */
 
 /**
- * オペレータのリストをページング付きで取得する。
+ * 組織のリストを取得する。
  *
  * @package VizualizerAdmin
  * @author Naohisa Minagawa <info@vizualizer.jp>
  */
-class VizualizerAdmin_Module_Operator_Page extends Vizualizer_Plugin_Module_Page
+class VizualizerAdmin_Module_Company_List extends Vizualizer_Plugin_Module_List
 {
 
     function execute($params)
     {
-        $post = Vizualizer::request();
-        if ($params->check("roles")) {
-            $search = $post["search"];
-            $search["in:role_id"] = explode(",", $params->get("roles"));
-            $params->set("search", $search);
+        if ($params->check("mode", "normal") == "select") {
+            $post = Vizualizer::request()->export();
         }
-        $this->executeImpl($params, "Admin", "CompanyOperator", $params->get("result", "operators"));
+        Vizualizer::request()->set("search", array("display_flg" => "1"));
+        $this->executeImpl($params, "Admin", "Company", $params->get("result", "companys"));
+        if ($params->check("mode", "normal") == "select") {
+            Vizualizer::request()->import($post);
+        }
     }
 }
-?>
