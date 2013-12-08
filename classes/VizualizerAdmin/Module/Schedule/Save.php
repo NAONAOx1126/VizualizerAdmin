@@ -28,11 +28,36 @@
  * @package VizualizerAdmin
  * @author Naohisa Minagawa <info@vizualizer.jp>
  */
-class VizualizerAdmin_Module_Schedule_Save extends Vizualizer_Plugin_Module_Save
+class VizualizerAdmin_Module_Schedule_Save extends Vizualizer_Plugin_Module
 {
 
     function execute($params)
     {
-        $this->executeImpl("Admin", "OperatorSchedule", "schedule_id");
+        $post = Vizualizer::request();
+        if ($post["add"] || $post["save"]) {
+            $loader = new Vizualizer_Plugin("Admin");
+            $model = $loader->loadModel("OperatorSchedule");
+
+            // トランザクションの開始
+            $connection = Vizualizer_Database_Factory::begin("admin");
+
+            try {
+                if ($post["schedule_id"] > 0) {
+                    $model->createSchedule($post["operator_id"], $post["start_time"], $post["end_time"], $post["location"], $post["schedule_id"]);
+                } else {
+                    $model->createSchedule($post["operator_id"], $post["start_time"], $post["end_time"], $post["location"]);
+                }
+
+                // エラーが無かった場合、処理をコミットする。
+                Vizualizer_Database_Factory::commit($connection);
+
+                $this->removeInput("add");
+                $this->removeInput("save");
+                $this->reload();
+            } catch (Exception $e) {
+                Vizualizer_Database_Factory::rollback($connection);
+                throw $e;
+            }
+        }
     }
 }

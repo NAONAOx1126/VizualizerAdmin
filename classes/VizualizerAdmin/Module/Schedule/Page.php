@@ -33,6 +33,13 @@ class VizualizerAdmin_Module_Schedule_Page extends Vizualizer_Plugin_Module_Page
 
     function execute($params)
     {
+            // オペレータが管理者で無い場合は、自分のスケジュールのみを対象
+        $attr = Vizualizer::attr();
+        if (!$params->check("admin_group") || !$attr[VizualizerAdmin::KEY]->hasRole(explode(",", $params->get("admin_group")))) {
+            // 管理グループ未設定もしくは、管理グループに含まれない場合は、オペレータIDで制限
+            $this->addCondition("operator_id", $attr[VizualizerAdmin::KEY]->operator_id);
+        }
+
         $this->executeImpl($params, "Admin", "OperatorSchedule", $params->get("result", "schedules"));
     }
 }

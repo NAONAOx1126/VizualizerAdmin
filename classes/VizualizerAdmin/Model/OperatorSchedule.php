@@ -53,6 +53,16 @@ class VizualizerAdmin_Model_OperatorSchedule extends Vizualizer_Plugin_Model
     }
 
     /**
+     * 開始日でデータを取得する。
+     *
+     * @param string $start_day
+     */
+    public function findAllByStartDay($start_day)
+    {
+        $result = $this->findAllBy(array("like:start_time" => date("Y-m-d", strtotime($start_day)) . " %"));
+    }
+
+    /**
      * 組織に所属するオペレータのリストを取得する。
      *
      * @return オペレータのリスト
@@ -65,24 +75,25 @@ class VizualizerAdmin_Model_OperatorSchedule extends Vizualizer_Plugin_Model
         return $companyOperator;
     }
 
-    public function createScehdule($operator_id, $start_time, $end_time, $location = "", $schedule_id = null){
+    public function createSchedule($operator_id, $start_time, $end_time, $location = "", $schedule_id = null)
+    {
         // 時間パラメータを調整
         $start_time = date("Y-m-d H:i:s", strtotime($start_time));
         $end_time = date("Y-m-d H:i:s", strtotime($end_time));
 
         // 指定した時間帯の予定状況を確認
         $condition = array("operator_id" => $operator_id, "ge:start_time" => $end_time, "le:end_time" => $start_time);
-        if($schedule_id > 0){
+        if ($schedule_id > 0) {
             $condition["ne:schedule_id"] = $schedule_id;
         }
         $duplicated = $this->findAllBy($condition);
-        if(count($duplicated) > 0){
+        if ($duplicated->valid()) {
             // 時間のかぶる予定があった場合はエラー
-            throw new Vizualizer_Exception_Invalid(array("指定の時間帯には既に予定が設定されています。"));
+            throw new Vizualizer_Exception_Invalid("operator_id", "指定の時間帯には既に予定が設定されています。");
         }
 
         // 予定の登録
-        if($schedule_id > 0){
+        if ($schedule_id > 0) {
             $this->findByPrimaryKey($schedule_id);
         }
         $this->operator_id = $operator_id;

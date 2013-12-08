@@ -34,10 +34,15 @@ class VizualizerAdmin_Module_Operator_Page extends Vizualizer_Plugin_Module_Page
     function execute($params)
     {
         $post = Vizualizer::request();
-        if ($params->check("roles")) {
-            $search = $post["search"];
-            $search["in:role_id"] = explode(",", $params->get("roles"));
-            $params->set("search", $search);
+        $loader = new Vizualizer_Plugin("Admin");
+        $role = $loader->loadModel("Role");
+        $roles = $role->findAllBy(array("in:role_code" => explode(",", $params->get("roles"))));
+        $roleIds = array();
+        foreach ($roles as $role) {
+            $roleIds[] = $role->role_id;
+        }
+        if (!empty($roleIds)) {
+            $this->addCondition("in:role_id", array_values($roleIds));
         }
         $this->executeImpl($params, "Admin", "CompanyOperator", $params->get("result", "operators"));
     }

@@ -33,6 +33,27 @@ class VizualizerAdmin_Module_Schedule_List extends Vizualizer_Plugin_Module_List
 
     function execute($params)
     {
+
+        // オペレータが管理者で無い場合は、自分のスケジュールのみを対象
+        $attr = Vizualizer::attr();
+        if (!$params->check("admin_group") || !$attr[VizualizerAdmin::KEY]->hasRole(explode(",", $params->get("admin_group")))) {
+            // 管理グループ未設定もしくは、管理グループに含まれない場合は、オペレータIDで制限
+            $this->addCondition("operator_id", $attr[VizualizerAdmin::KEY]->operator_id);
+        }
+
+        // 開始日が未設定の場合は当日を設定
+        $post = Vizualizer::request();
+        if (!isset($post["start_day"])) {
+            $post->set("start_day", date("Y-m-d"));
+        }
+        $this->addCondition("like:start_time", date("Y-m-d", strtotime($post["start_day"])) . " %");
+
+        // 指定日と前後の日付を設定
+        $attr = Vizualizer::attr();
+        $attr["thisDay"] = date("Y-m-d", strtotime($post["start_day"]));
+        $attr["prevDay"] = date("Y-m-d", strtotime($post["start_day"]) - 24 * 3600);
+        $attr["nextDay"] = date("Y-m-d", strtotime($post["start_day"]) + 24 * 3600);
+
         $this->executeImpl($params, "Admin", "OperatorSchedule", $params->get("result", "schedules"));
     }
 }
