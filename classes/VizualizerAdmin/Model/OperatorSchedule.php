@@ -102,4 +102,21 @@ class VizualizerAdmin_Model_OperatorSchedule extends Vizualizer_Plugin_Model
         $this->location = $location;
         $this->save();
     }
+
+    public function getTargets($prefix){
+        $start = strtotime($this->start_time);
+        $now = $start;
+        $result = array();
+        while($now < strtotime($this->end_time)){
+            $id = $prefix."-".$this->operator_id."-";
+            if(date("Ymd", $start) < date("Ymd", $now)){
+                $id .= (date("H", $now) + 24).date("i", $now);
+            }else{
+                $id .= date("Hi", $now);
+            }
+            $result[$id] = array("operator_id" => $this->operator_id, "location" => $this->location, "now" => date("Y-m-d H:i:s", $now));
+            $now += 1800;
+        }
+        return $result;
+    }
 }

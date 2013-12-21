@@ -33,13 +33,10 @@ class VizualizerAdmin_Module_Company_List extends Vizualizer_Plugin_Module_List
 
     function execute($params)
     {
-        if ($params->check("mode", "normal") == "select") {
-            $post = Vizualizer::request()->export();
-        }
-        Vizualizer::request()->set("search", array("display_flg" => "1"));
+        $post = Vizualizer::request();
+        $search = $post["search"];
+        $search["display_flg"] = "1";
+        $post->set("search", $search);
         $this->executeImpl($params, "Admin", "Company", $params->get("result", "companys"));
-        if ($params->check("mode", "normal") == "select") {
-            Vizualizer::request()->import($post);
-        }
     }
 }

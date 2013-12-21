@@ -86,9 +86,9 @@ class VizualizerAdmin_Model_Company extends Vizualizer_Plugin_Model
     /**
      * 組織で所有するFacebookGroupのリストを取得する。
      *
-     * @return オペレータのリスト
+     * @return Facebookのグループ
      */
-    public function facebook_groups()
+    public function facebookGroups()
     {
         $loader = new Vizualizer_Plugin("facebook");
         $group = $loader->loadModel("Group");

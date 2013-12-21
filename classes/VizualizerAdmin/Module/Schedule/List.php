@@ -41,18 +41,15 @@ class VizualizerAdmin_Module_Schedule_List extends Vizualizer_Plugin_Module_List
             $this->addCondition("operator_id", $attr[VizualizerAdmin::KEY]->operator_id);
         }
 
-        // 開始日が未設定の場合は当日を設定
-        $post = Vizualizer::request();
-        if (!isset($post["start_day"])) {
-            $post->set("start_day", date("Y-m-d"));
-        }
-        $this->addCondition("like:start_time", date("Y-m-d", strtotime($post["start_day"])) . " %");
-
         // 指定日と前後の日付を設定
-        $attr = Vizualizer::attr();
-        $attr["thisDay"] = date("Y-m-d", strtotime($post["start_day"]));
-        $attr["prevDay"] = date("Y-m-d", strtotime($post["start_day"]) - 24 * 3600);
-        $attr["nextDay"] = date("Y-m-d", strtotime($post["start_day"]) + 24 * 3600);
+        $post = Vizualizer::request();
+        $search = $post["search"];
+        if (array_key_exists("back:start_time", $search)) {
+            $attr = Vizualizer::attr();
+            $attr["thisDay"] = date("Y-m-d", strtotime($search["back:start_time"]));
+            $attr["prevDay"] = date("Y-m-d", strtotime($search["back:start_time"]) - 24 * 3600);
+            $attr["nextDay"] = date("Y-m-d", strtotime($search["back:start_time"]) + 24 * 3600);
+        }
 
         $this->executeImpl($params, "Admin", "OperatorSchedule", $params->get("result", "schedules"));
     }
