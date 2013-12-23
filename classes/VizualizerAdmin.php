@@ -25,6 +25,7 @@
 // プラグインの初期化
 VizualizerAdmin::initialize();
 
+
 /**
  * プラグインの設定用クラス
  *
