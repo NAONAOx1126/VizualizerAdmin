@@ -23,30 +23,16 @@
  */
 
 /**
- * オペレータのリストをページング付きで取得する。
+ * 取引分割設定のデータを削除する。
  *
  * @package VizualizerAdmin
  * @author Naohisa Minagawa <info@vizualizer.jp>
  */
-class VizualizerAdmin_Module_Operator_Page extends Vizualizer_Plugin_Module_Page
+class VizualizerAdmin_Module_TradeSplit_Delete extends Vizualizer_Plugin_Module_Delete
 {
 
     function execute($params)
     {
-        $post = Vizualizer::request();
-        $loader = new Vizualizer_Plugin("Admin");
-        $role = $loader->loadModel("Role");
-        if($params->check("roles")){
-            $roles = $role->findAllBy(array("in:role_code" => explode(",", $params->get("roles"))));
-            $roleIds = array();
-            foreach ($roles as $role) {
-                $roleIds[] = $role->role_id;
-            }
-            if (!empty($roleIds)) {
-                $this->addCondition("in:role_id", array_values($roleIds));
-            }
-        }
-        $this->executeImpl($params, "Admin", "CompanyOperator", $params->get("result", "operators"));
+        $this->executeImpl("Admin", "TradeSplit", "trade_split_id");
     }
 }
-?>

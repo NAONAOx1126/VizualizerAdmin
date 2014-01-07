@@ -23,30 +23,35 @@
  */
 
 /**
- * オペレータのリストをページング付きで取得する。
+ * 管理画面のログイン画面用の初期化処理を実行する。
  *
  * @package VizualizerAdmin
  * @author Naohisa Minagawa <info@vizualizer.jp>
  */
-class VizualizerAdmin_Module_Operator_Page extends Vizualizer_Plugin_Module_Page
+class VizualizerAdmin_Module_InitLogin extends Vizualizer_Plugin_Module
 {
 
     function execute($params)
     {
-        $post = Vizualizer::request();
-        $loader = new Vizualizer_Plugin("Admin");
-        $role = $loader->loadModel("Role");
-        if($params->check("roles")){
-            $roles = $role->findAllBy(array("in:role_code" => explode(",", $params->get("roles"))));
-            $roleIds = array();
-            foreach ($roles as $role) {
-                $roleIds[] = $role->role_id;
-            }
-            if (!empty($roleIds)) {
-                $this->addCondition("in:role_id", array_values($roleIds));
-            }
+        // ベースURLを取得
+        if (substr(VIZUALIZER_SUBDIR, -1) == "/") {
+            $baseUrl = substr(VIZUALIZER_SUBDIR, 0, -1);
+        }else{
+            $baseUrl = VIZUALIZER_SUBDIR;
         }
-        $this->executeImpl($params, "Admin", "CompanyOperator", $params->get("result", "operators"));
+
+        // 現在表示しているページのHTMLを取得
+        $currentPage = str_replace("?".$_SERVER["QUERY_STRING"], "", $_SERVER["REQUEST_URI"]);
+        if(strpos($currentPage, $baseUrl) === 0){
+            $currentPage = substr($currentPage, strlen($baseUrl));
+        }
+
+        // 呼び出されたページを取得
+        $attr = Vizualizer::attr();
+        if($attr["templateName"] != $currentPage){
+            $attr["loginUrl"] = $_SERVER["REQUEST_URI"];
+        }else{
+            $attr["loginUrl"] = $baseUrl.$params->get("default", "/index.html");
+        }
     }
 }
-?>

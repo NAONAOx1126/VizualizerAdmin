@@ -102,7 +102,7 @@ class VizualizerAdmin_Model_Company extends Vizualizer_Plugin_Model
     function pref_name($pref_name = null)
     {
         $loader = new Vizualizer_Plugin("address");
-        $pref = $loader->loadModel("Pref");
+        $pref = $loader->loadModel("Prefecture");
         // 引数を渡した場合はIDを登録
         if ($pref_name != null) {
             $pref->findByName($pref_name);

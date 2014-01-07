@@ -1,0 +1,21 @@
+CREATE TABLE IF NOT EXISTS `admin_trades` (
+  `trade_id` int(11) NOT NULL AUTO_INCREMENT COMMENT '取引ID',
+  `related_trade_id` int(11) NOT NULL COMMENT '関連取引ID',
+  `trade_name` varchar(200) COLLATE utf8_unicode_ci NOT NULL COMMENT '取引名称',
+  `trade_type_id` int(11) NOT NULL COMMENT '取引種別ID',
+  `worker_operator_id` int(11) NOT NULL COMMENT '受注担当者ID',
+  `customer_operator_id` int(11) NOT NULL COMMENT '発注担当者ID',
+  `subtotal` int(11) NOT NULL COMMENT '小計',
+  `discount` int(11) NOT NULL COMMENT '割引金額',
+  `tax` int(11) NOT NULL COMMENT '消費税',
+  `total` int(11) NOT NULL COMMENT '合計金額',
+  `start_date` date NOT NULL COMMENT '見積書発行日',
+  `billing_date` date NOT NULL COMMENT '請求書発行日',
+  `payment_date` date NOT NULL COMMENT '支払い期限日',
+  `complete_date` date NOT NULL COMMENT '入金確認日',
+  `trade_status` int(11) NOT NULL COMMENT '取引ステータス',
+  `continue_flg` tinyint(1) NOT NULL COMMENT '継続案件フラグ',
+  `create_time` datetime NOT NULL COMMENT 'データ登録日時',
+  `update_time` datetime NOT NULL COMMENT 'データ最終更新日時',
+  PRIMARY KEY (`trade_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci COMMENT='管理組織取引テーブル';
