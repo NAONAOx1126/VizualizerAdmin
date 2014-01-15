@@ -23,17 +23,26 @@
  */
 
 /**
- * 組織のリストを取得する。
+ * 取引のリストをページング付きで取得する。
  *
  * @package VizualizerAdmin
  * @author Naohisa Minagawa <info@vizualizer.jp>
  */
-class VizualizerAdmin_Module_Company_List extends Vizualizer_Plugin_Module_List
+class VizualizerAdmin_Module_Trade_Page extends Vizualizer_Plugin_Module_Page
 {
 
     function execute($params)
     {
-        $this->addCondition("display_flg", "1");
-        $this->executeImpl($params, "Admin", "Company", $params->get("result", "companys"));
+        $loader = new Vizualizer_Plugin("Admin");
+        $trade = $loader->loadModel("Trade");
+        $trades = $trade->findAllBy(array("ge:related_trade_id" => "1"));
+        $relatedIds = array();
+        foreach($trades as $trade){
+            $relatedIds[$trade->related_trade_id] = $trade->related_trade_id;
+        }
+        if(!empty($relatedIds)){
+            $this->addCondition("nin:trade_id", array_values($relatedIds));
+        }
+        $this->executeImpl($params, "Admin", "Trade", $params->get("result", "trades"));
     }
 }

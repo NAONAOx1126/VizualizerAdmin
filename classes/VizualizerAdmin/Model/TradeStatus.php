@@ -23,17 +23,32 @@
  */
 
 /**
- * 組織のリストを取得する。
+ * 取引ステータスのモデルです。
  *
  * @package VizualizerAdmin
  * @author Naohisa Minagawa <info@vizualizer.jp>
  */
-class VizualizerAdmin_Module_Company_List extends Vizualizer_Plugin_Module_List
+class VizualizerAdmin_Model_TradeStatus extends Vizualizer_Plugin_Model
 {
 
-    function execute($params)
+    /**
+     * コンストラクタ
+     *
+     * @param $values モデルに初期設定する値
+     */
+    public function __construct($values = array())
     {
-        $this->addCondition("display_flg", "1");
-        $this->executeImpl($params, "Admin", "Company", $params->get("result", "companys"));
+        $loader = new Vizualizer_Plugin("admin");
+        parent::__construct($loader->loadTable("TradeStatuses"), $values);
+    }
+
+    /**
+     * 主キーでデータを取得する。
+     *
+     * @param $trade_status_id 取引ステータスID
+     */
+    public function findByPrimaryKey($trade_status_id)
+    {
+        $this->findBy(array("trade_status_id" => $trade_status_id));
     }
 }

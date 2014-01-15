@@ -53,6 +53,17 @@ class VizualizerAdmin_Model_TradeSplit extends Vizualizer_Plugin_Model
     }
 
     /**
+     * 作業者IDと顧客IDでデータを取得する。
+     *
+     * @param $worker_operator_id 作業者ID
+     * @param $customer_operator_id 顧客ID
+     * @param $trade_type_id 取引種別ID
+     */
+    public function findByWorkerCustomerType($worker_operator_id, $customer_operator_id, $trade_type_id){
+        $this->findBy(array("worker_operator_id" => $worker_operator_id, "customer_operator_id" => $customer_operator_id, "trade_type_id" => $trade_type_id));
+    }
+
+    /**
      * 取引IDでデータを取得する。
      *
      * @param $trade_id 取引ID

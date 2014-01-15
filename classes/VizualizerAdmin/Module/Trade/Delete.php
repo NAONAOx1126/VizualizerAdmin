@@ -23,17 +23,16 @@
  */
 
 /**
- * 組織のリストを取得する。
+ * 取引分割設定のデータを削除する。
  *
  * @package VizualizerAdmin
  * @author Naohisa Minagawa <info@vizualizer.jp>
  */
-class VizualizerAdmin_Module_Company_List extends Vizualizer_Plugin_Module_List
+class VizualizerAdmin_Module_Trade_Delete extends Vizualizer_Plugin_Module_Delete
 {
 
     function execute($params)
     {
-        $this->addCondition("display_flg", "1");
-        $this->executeImpl($params, "Admin", "Company", $params->get("result", "companys"));
+        $this->executeImpl("Admin", "Trade", "trade_id");
     }
 }

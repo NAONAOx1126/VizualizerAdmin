@@ -33,10 +33,7 @@ class VizualizerAdmin_Module_Company_Page extends Vizualizer_Plugin_Module_Page
 
     function execute($params)
     {
-        $post = Vizualizer::request();
-        $search = $post["search"];
-        $search["display_flg"] = "1";
-        $post->set("search", $search);
+        $this->addCondition("display_flg", "1");
         $this->executeImpl($params, "Admin", "Company", $params->get("result", "companys"));
     }
 }

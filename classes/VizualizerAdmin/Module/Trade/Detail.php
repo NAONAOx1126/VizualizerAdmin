@@ -23,17 +23,17 @@
  */
 
 /**
- * 組織のリストを取得する。
+ * 取引分割設定の詳細データを取得する。
  *
  * @package VizualizerAdmin
  * @author Naohisa Minagawa <info@vizualizer.jp>
  */
-class VizualizerAdmin_Module_Company_List extends Vizualizer_Plugin_Module_List
+class VizualizerAdmin_Module_Trade_Detail extends Vizualizer_Plugin_Module_Detail
 {
 
     function execute($params)
     {
-        $this->addCondition("display_flg", "1");
-        $this->executeImpl($params, "Admin", "Company", $params->get("result", "companys"));
+        $post = Vizualizer::request();
+        $this->executeImpl("Admin", "Trade", $post["trade_id"], $params->get("result", "trade"));
     }
 }
