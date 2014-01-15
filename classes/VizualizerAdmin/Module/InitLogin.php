@@ -42,7 +42,7 @@ class VizualizerAdmin_Module_InitLogin extends Vizualizer_Plugin_Module
 
         // 現在表示しているページのHTMLを取得
         $currentPage = str_replace("?".$_SERVER["QUERY_STRING"], "", $_SERVER["REQUEST_URI"]);
-        if(strpos($currentPage, $baseUrl) === 0){
+        if(!empty($baseUrl) && strpos($currentPage, $baseUrl) === 0){
             $currentPage = substr($currentPage, strlen($baseUrl));
         }
 
