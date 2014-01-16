@@ -35,7 +35,7 @@ class VizualizerAdmin_Module_Trade_Pdf_Quotation extends Vizualizer_Plugin_Modul
     {
         $post = Vizualizer::request();
         if(!is_array($post["trade_ids"])){
-            $tradeIds = array($post["trade_ids"]);
+            $tradeIds = explode(",", $post["trade_ids"]);
         }else{
             $tradeIds = $post["trade_ids"];
         }
