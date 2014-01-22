@@ -60,11 +60,5 @@ class VizualizerAdmin
         VizualizerAdmin_Table_Companys::install();
         VizualizerAdmin_Table_Roles::install();
         VizualizerAdmin_Table_CompanyOperators::install();
-        VizualizerAdmin_Table_OperatorSchedules::install();
-        VizualizerAdmin_Table_TradeTypes::install();
-        VizualizerAdmin_Table_TradeStatuses::install();
-        VizualizerAdmin_Table_TradeSplits::install();
-        VizualizerAdmin_Table_Trades::install();
-        VizualizerAdmin_Table_TradeDetails::install();
     }
 }
