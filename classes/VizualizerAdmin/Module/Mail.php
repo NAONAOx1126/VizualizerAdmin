@@ -35,7 +35,16 @@ class VizualizerAdmin_Module_Mail extends Vizualizer_Plugin_Module
     {
         if($params->check("title") && $params->check("template")){
             $post = Vizualizer::request();
-            $operatorId = $post["operator_id"];
+            if($params->check("operator_id")){
+                if($params->get("opeartor_id") == "login"){
+                    $attr = Vizualizer::attr();
+                    $operatorId = $attr[VizualizerAdmin::KEY]->operator_id;
+                }else{
+                    $operatorId = $params->get("opeartor_id");
+                }
+            }else{
+                $operatorId = $post["operator_id"];
+            }
             $title = $params->get("title");
             $templateName = $params->get("template");
 
