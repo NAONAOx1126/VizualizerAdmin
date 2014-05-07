@@ -73,10 +73,8 @@ class VizualizerAdmin_Module_Login extends Vizualizer_Plugin_Module
                     throw new Vizualizer_Exception_Invalid("login", "アカウントが有効期限切れです。");
                 }
 
-                // アクセス権限のあるサイトか調べる
-                $company = $companyOperator->company();
-
                 // ログインに成功した場合には管理者情報をセッションに格納する。
+                $companyOperator->administrator_flg = $companyOperator->role()->administrator_flg;
                 Vizualizer_Session::set(VizualizerAdmin::SESSION_KEY, $companyOperator->toArray());
 
                 // 権限に自動遷移先が割り当てられている場合はリダイレクト
