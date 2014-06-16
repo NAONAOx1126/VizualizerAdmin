@@ -90,6 +90,11 @@ class VizualizerAdmin_Module_Login extends Vizualizer_Plugin_Module
         if ($companyOperator->operator_id > 0) {
             $attr = Vizualizer::attr();
             $attr[VizualizerAdmin::KEY] = $companyOperator;
+
+            // パラメータに自動遷移先が割り当てられている場合はリダイレクト
+            if($params->check("redirect")){
+                $this->redirectInside($params->check("redirect"));
+            }
         } else {
             Vizualizer_Logger::writeDebug("認証されていません。");
             throw new Vizualizer_Exception_Invalid("", "");
