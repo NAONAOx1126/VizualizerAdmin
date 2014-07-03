@@ -62,13 +62,13 @@ class VizualizerAdmin_Module_Login extends Vizualizer_Plugin_Module
                 }
 
                 // アカウントが有効期限内か調べる。
-                if (!empty($companyOperator->start_time) && time() < strtotime($companyOperator->start_time)) {
+                if (!empty($companyOperator->start_time) && time() < Vizualizer::now()->strToTime($companyOperator->start_time)->getTime()) {
                     Vizualizer_Logger::writeDebug("アカウントが利用開始されていません。");
                     throw new Vizualizer_Exception_Invalid("login", "アカウントが利用開始されていません。");
                 }
 
                 // アカウントが有効期限内か調べる。
-                if (!empty($companyOperator->end_time) && time() > strtotime($companyOperator->end_time)) {
+                if (!empty($companyOperator->end_time) && time() > Vizualizer::now()->strToTime($companyOperator->end_time)->getTime()) {
                     Vizualizer_Logger::writeDebug("アカウントが有効期限切れです。");
                     throw new Vizualizer_Exception_Invalid("login", "アカウントが有効期限切れです。");
                 }
