@@ -31,10 +31,14 @@
 class VizualizerAdmin_Model_CompanyOperator extends Vizualizer_Plugin_Model
 {
     /**
+     * 組織のキャッシュ用変数
+     */
+    private $company;
+
+    /**
      * 役割のキャッシュ用変数
      */
     private $role;
-
 
     /**
      * コンストラクタ
@@ -90,10 +94,12 @@ class VizualizerAdmin_Model_CompanyOperator extends Vizualizer_Plugin_Model
      */
     public function company()
     {
-        $loader = new Vizualizer_Plugin("admin");
-        $company = $loader->loadModel("Company");
-        $company->findByPrimaryKey($this->company_id);
-        return $company;
+        if(!$this->company){
+            $loader = new Vizualizer_Plugin("admin");
+            $this->company = $loader->loadModel("Company");
+            $this->company->findByPrimaryKey($this->company_id);
+        }
+        return $this->company;
     }
 
     /**
