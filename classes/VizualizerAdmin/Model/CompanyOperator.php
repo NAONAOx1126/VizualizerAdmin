@@ -30,6 +30,11 @@
  */
 class VizualizerAdmin_Model_CompanyOperator extends Vizualizer_Plugin_Model
 {
+    /**
+     * 役割のキャッシュ用変数
+     */
+    private $role;
+
 
     /**
      * コンストラクタ
@@ -96,10 +101,12 @@ class VizualizerAdmin_Model_CompanyOperator extends Vizualizer_Plugin_Model
      */
     public function role()
     {
-        $loader = new Vizualizer_Plugin("admin");
-        $role = $loader->loadModel("Role");
-        $role->findByPrimaryKey($this->role_id);
-        return $role;
+        if(!$this->role){
+            $loader = new Vizualizer_Plugin("admin");
+            $this->role = $loader->loadModel("Role");
+            $this->role->findByPrimaryKey($this->role_id);
+        }
+        return $this->role;
     }
 
     /**
