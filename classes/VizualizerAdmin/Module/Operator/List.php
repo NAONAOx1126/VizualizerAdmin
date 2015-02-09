@@ -34,5 +34,63 @@ class VizualizerAdmin_Module_Operator_List extends Vizualizer_Plugin_Module_List
     function execute($params)
     {
         $this->executeImpl($params, "Admin", "CompanyOperator", $params->get("result", "operators"));
+        if ($params->get("with_company", "0") == "1") {
+            $attr = Vizualizer::attr();
+            $post = Vizualizer::request();
+
+            // セレクトモードの時は通常の検索条件を適用しない
+            if ($params->check("mode", "normal") == "select") {
+                $savedPost = $post->export();
+                $selectSearch = array();
+                if($params->check("selectSearchKeys") && array_key_exists("search", $savedPost) && is_array($savedPost["search"])){
+                    $selectKeys = explode(",", $params->get("selectSearchKeys"));
+                    foreach($selectKeys as $key){
+                        if(array_key_exists($key, $savedPost["search"])){
+                            $selectSearch[$key] = $savedPost["search"][$key];
+                        }
+                    }
+                }
+                Vizualizer::request()->set("search", $selectSearch);
+            }
+            if (!$params->check("search") || isset($post[$params->get("search")])) {
+                // サイトデータを取得する。
+                $loader = new Vizualizer_Plugin("Admin");
+                $model = $loader->loadModel("Company");
+
+                // カテゴリが選択された場合、カテゴリの商品IDのリストを使う
+                $conditions = $this->condition;
+                if (is_array($post["search"])) {
+                    foreach ($post["search"] as $key => $value) {
+                        if (!$this->isEmpty($value)) {
+                            if ($params->get("mode", "list") != "select" || !$params->check("select") || $key != substr($params->get("select"), 0, strpos($params->get("select"), "|"))) {
+                                $conditions[$key] = $value;
+                            }
+                        }
+                    }
+                }
+
+                $models = $model->findAllBy($conditions, $sortOrder, $sortReverse, $forceOperator);
+                $list = array();
+                if ($params->get("mode", "list") == "list") {
+                    foreach($attr[$result] as $item){
+                        $list[] = $item;
+                    }
+                    foreach($models as $item){
+                        $list[] = $item;
+                    }
+                    $attr[$result] = $list;
+                } elseif ($params->get("mode", "list") == "select") {
+                        $list = $attr[$result];
+                        foreach ($models as $model) {
+                            $list["*" . $model->$select_key] = $model->$select_value;
+                        }
+                        $attr[$result] = $list;
+                    }
+                }
+                if ($params->get("mode", "list") == "select") {
+                    Vizualizer::request()->import($savedPost);
+                }
+
+        }
     }
 }
