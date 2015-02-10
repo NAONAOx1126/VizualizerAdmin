@@ -58,7 +58,7 @@ class VizualizerAdmin_Module_Operator_List extends Vizualizer_Plugin_Module_List
                 $model = $loader->loadModel("Company");
 
                 // カテゴリが選択された場合、カテゴリの商品IDのリストを使う
-                $conditions = $this->condition;
+                $conditions = array();
                 if (is_array($post["search"])) {
                     foreach ($post["search"] as $key => $value) {
                         if (!$this->isEmpty($value)) {
