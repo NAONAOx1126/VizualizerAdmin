@@ -37,6 +37,7 @@ class VizualizerAdmin_Module_Operator_List extends Vizualizer_Plugin_Module_List
         if ($params->get("with_company", "0") == "1") {
             $attr = Vizualizer::attr();
             $post = Vizualizer::request();
+            $result = $params->get("result", "operators");
 
             // セレクトモードの時は通常の検索条件を適用しない
             if ($params->check("mode", "normal") == "select") {
@@ -69,7 +70,7 @@ class VizualizerAdmin_Module_Operator_List extends Vizualizer_Plugin_Module_List
                     }
                 }
 
-                $models = $model->findAllBy($conditions, $sortOrder, $sortReverse, $forceOperator);
+                $models = $model->findAllBy($conditions);
                 $list = array();
                 if ($params->get("mode", "list") == "list") {
                     foreach($attr[$result] as $item){
@@ -82,7 +83,7 @@ class VizualizerAdmin_Module_Operator_List extends Vizualizer_Plugin_Module_List
                 } elseif ($params->get("mode", "list") == "select") {
                         $list = $attr[$result];
                         foreach ($models as $model) {
-                            $list["*" . $model->$select_key] = $model->$select_value;
+                            $list["*" . $model->company_id] = $model->company_name;
                         }
                         $attr[$result] = $list;
                     }
