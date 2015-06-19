@@ -75,8 +75,8 @@ class VizualizerAdmin_Model_Company extends Vizualizer_Plugin_Model
         $loader = new Vizualizer_Plugin("admin");
         $companyOperator = $loader->loadModel("CompanyOperator");
         $companyOperators = $companyOperator->findAllByCompanyId($this->company_id);
-        if (count($companyOperators) > 0) {
-            return $companyOperators[0];
+        if ($companyOperators->count() > 0) {
+            return $companyOperators->current();
         } else {
             $companyOperator->company_id = $this->company_id;
             return $companyOperator;
