@@ -61,7 +61,9 @@ class VizualizerAdmin_Model_Company extends Vizualizer_Plugin_Model
     {
         $loader = new Vizualizer_Plugin("admin");
         $companyOperator = $loader->loadModel("CompanyOperator");
+        Vizualizer_Plugin_Model::$limitedOperator = false;
         $companyOperators = $companyOperator->findAllByCompanyId($this->company_id);
+        Vizualizer_Plugin_Model::$limitedOperator = true;
         return $companyOperators;
     }
 
@@ -74,7 +76,9 @@ class VizualizerAdmin_Model_Company extends Vizualizer_Plugin_Model
     {
         $loader = new Vizualizer_Plugin("admin");
         $companyOperator = $loader->loadModel("CompanyOperator");
+        Vizualizer_Plugin_Model::$limitedOperator = false;
         $companyOperators = $companyOperator->findAllByCompanyId($this->company_id);
+        Vizualizer_Plugin_Model::$limitedOperator = true;
         if ($companyOperators->count() > 0) {
             return $companyOperators->current();
         } else {
