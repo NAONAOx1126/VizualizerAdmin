@@ -88,6 +88,19 @@ class VizualizerAdmin_Model_Company extends Vizualizer_Plugin_Model
     }
 
     /**
+     * 組織に所属するメールテンプレートを取得する。
+     *
+     * @return オペレータ
+     */
+    public function mailTemplate($template_code)
+    {
+        $loader = new Vizualizer_Plugin("admin");
+        $mailTemplate = $loader->loadModel("MailTemplate");
+        $mailTemplate->findAllByCompanyId($this->company_id, $template_code);
+        return $mailTemplate;
+    }
+
+    /**
      * 組織で所有するFacebookGroupのリストを取得する。
      *
      * @return Facebookのグループ
